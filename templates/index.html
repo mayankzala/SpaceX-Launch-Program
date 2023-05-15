@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceX Launch Programs</title>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link rel="stylesheet"  href="{{url_for('static',filename='style.css')}}">
+</head>
+
+<body>
+    <h1 class="font heading">SpaceX Launch Programs</h1>
+    <div class="screen">
+        <!-- filter section -->
+        <div class="filter  border_radius background_color margin">
+            <h3 class="font ">Filters</h3>
+
+            <div class="filter_type ">
+                <!-- Launch Year -->
+                <div class="filter_individaul ">
+                    <div class="filter_heading">
+                        <p class="font tag">Launch Year</p>
+                        <hr>
+                    </div>
+                    <div class="filter_design_common_class" id="year_filter_id">
+                        <button type="button" value='2006' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2006</button>
+                        <button type="button" value='2007' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2007</button>
+                        <button type="button" value='2008' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2008</button>
+                        <button type="button" value='2009' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2009</button>
+                        <button type="button" value='2010' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2010</button>
+                        <button type="button" value='2011' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2011</button>
+                        <button type="button" value='2012' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2012</button>
+                        <button type="button" value='2013' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2013</button>
+                        <button type="button" value='2014' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2014</button>
+                        <button type="button" value='2015' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2015</button>
+                        <button type="button" value='2016' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2016</button>
+                        <button type="button" value='2017' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2017</button>
+                        <button type="button" value='2018' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2018</button>
+                        <button type="button" value='2019' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2019</button>
+                        <button type="button" value='2020' class="filter_value border_radius  font"
+                            onclick="year_filter(1)">2020</button>
+                    </div>
+                </div>
+                <!-- Successfull launch -->
+                <div class="filter_individaul ">
+                    <div class="filter_heading">
+                        <p class="font tag">Successful Launch</p>
+                        <hr>
+                    </div>
+                    <div class="filter_design_common_class" id="launch_filter_id">
+                        <button type="button" value='true' class="filter_value border_radius  font"
+                            onclick="year_filter(2)">True</button>
+                        <button type="button" value='false' class="filter_value border_radius  font"
+                            onclick="year_filter(2)">False</button>
+                    </div>
+                </div>
+
+
+                <!-- Successfull landing -->
+                <div class="filter_individaul ">
+                    <div class="filter_heading">
+                        <p class="font tag">Successful Landing</p>
+                        <hr>
+                    </div>
+                    <div class="filter_design_common_class" id="land_filter_id">
+                        <button type="button" value='true' class="filter_value border_radius  font"
+                            onclick="year_filter(3)">True</button>
+                        <button type="button" value='false' class="filter_value border_radius  font"
+                            onclick="year_filter(3)">False</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- program list -->
+        <div class="program  margin " id="program">
+            {%for i in data%}
+            <div class="program_detail background_color  border_radius" id="program_detail">
+                <div class="img border_radius">
+                    <img src="{{i['links']['mission_patch']}}" alt="img not found">
+                </div>
+                <p>
+                    <b style="color: blue;">{{i['mission_name']}} # {{i['flight_number']}}</b>
+                </p>
+                <p>
+                    <b>Mission Ides:</b>
+                <ul>
+                    {%for j in i['mission_id']%}
+                    <li>{{j}}</li>
+                    {%endfor%}
+                </ul>
+                </p>
+                <p>
+                    <b>Launch Year:</b> {{i['launch_year']}}
+                </p>
+                <p>
+                    <b>Successfull Launch:</b>{{i['launch_success']}}
+                </p>
+                <p>
+                    <b>Successfull Land:</b>{{i['rocket']['first_stage']['cores'][0]['land_success']}}
+                </p>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="font ">
+        <b> Developed by:</b> Mayank Zala(Pandit Deendayal Energy University)
+    </footer>
+
+    <script>
+        function year_filter(x) {
+
+            if (x === 1) {
+                const buttonsContainer1 = document.getElementById("year_filter_id");
+                var v = ''
+                // add an event listener to the parent element
+
+                const s = (event) => {
+                    // check if the clicked element is a button
+                    var data = []
+                    if (event.target.nodeName === "BUTTON") {
+                        // log the value of the clicked button
+                        v = event.target.value
+                        console.log(v)
+                    }
+                    const xhr = new XMLHttpRequest();
+                    // xhr.open('GET', `https://api.spaceXdata.com/v3/launches?limit=100&launch_year=${v}`);
+                    xhr.open('POST',`/filter_by_year_${v}`)
+
+                    // xhr.open('GET', `hello`);
+                    window.history.pushState(null,null,`filter_by_year_${v}`)
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            data = JSON.parse(xhr.responseText);
+
+                            // starting to create the element
+
+                            super_div = document.getElementById('program')
+                            super_div.innerHTML = ''
+                            console.log(data)
+                            for (var m = 0; m < data.length; m++) {
+                                var i = data[m]
+                                const main_div = document.createElement("div");
+                                main_div.setAttribute('class', 'program_detail background_color border_radius')
+                                main_div.setAttribute('id', 'program_detail')
+
+                                // image
+                                // 1
+
+                                var img_div=document.createElement('div')
+                                img_div.setAttribute('class','img border_radius')
+                                img_div.innerHTML = `<img src='${i['links']['mission_patch']}' alt='img not found'>`
+                                // 2
+                                var p_name=document.createElement('p')
+                                p_name.innerHTML = `<b style="color: blue;">${i['mission_name']} # ${i['flight_number']}</b>`
+
+                                var ul = document.createElement('ul')
+                                for (var j = 0; j < i['mission_id'].length; j++) {
+                                    var li = document.createElement('li')
+                                    li.innerHTML = i['mission_id'][j]
+                                    ul.appendChild(li)
+                                }
+                                // 3
+                                var id_mission=document.createElement('p')
+                                id_mission.innerHTML= `<b>Mission Ides:</b>${ul.outerHTML}`
+
+                                // 4
+                                var year=document.createElement('p')
+                                year.innerHTML = `<b>Launch Year:</b> ${i['launch_year']}`
+                                // 5
+                                var success_lauch=document.createElement('p')
+                                success_lauch.innerHTML = `<b>Successfull Launch:</b>${i['launch_success']}`
+
+                                // 6
+                                var succss_land=document.createElement('p')
+                                succss_land.innerHTML = `<b>Successfull Land:</b>${i['rocket']['first_stage']['cores'][0]['land_success']}`
+
+                                main_div.appendChild(img_div)
+                                main_div.appendChild(p_name)
+                                main_div.appendChild(id_mission)
+                                main_div.appendChild(year)
+                                main_div.appendChild(success_lauch)
+                                main_div.appendChild(succss_land)
+
+                                super_div.appendChild(main_div)
+
+                            }
+
+                        } else {
+                            console.log('Request failed.  Returned status of ' + xhr.status);
+                        }
+                    }
+                    xhr.send();
+                    buttonsContainer1.removeEventListener('click', s)
+                }
+                buttonsContainer1.addEventListener("click", s);
+
+            }
+            else if (x === 2) {
+                const buttonsContainer2 = document.getElementById("launch_filter_id");
+                var v = ''
+                // add an event listener to the parent element
+
+                const s = (event) => {
+                    // check if the clicked element is a button
+                    if (event.target.nodeName === "BUTTON") {
+                        // log the value of the clicked button
+                        v = event.target.value
+                        console.log(v)
+                    }
+                    const xhr = new XMLHttpRequest();
+                    // xhr.open('GET', `https://api.spaceXdata.com/v3/launches?limit=100&launch_success=${v}`);
+                    // xhr.open('GET', `hello`);
+                    xhr.open('POST',`/filter_by_launch_${v}`)
+                    window.history.pushState(null,null,`filter_by_launch_${v}`)
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            const data = JSON.parse(xhr.responseText);
+                            console.log(data)
+                            super_div = document.getElementById('program')
+                            super_div.innerHTML = ''
+                            for (var m = 0; m < data.length; m++) {
+                                var i = data[m]
+                                const main_div = document.createElement("div");
+                                main_div.setAttribute('class', 'program_detail background_color border_radius')
+                                main_div.setAttribute('id', 'program_detail')
+
+                                // image
+                                // 1
+
+                                var img_div=document.createElement('div')
+                                img_div.setAttribute('class','img border_radius')
+                                img_div.innerHTML = `<img src='${i['links']['mission_patch']}' alt='img not found'>`
+                                // 2
+                                var p_name=document.createElement('p')
+                                p_name.innerHTML = `<b style="color: blue;">${i['mission_name']} # ${i['flight_number']}</b>`
+
+                                var ul = document.createElement('ul')
+                                for (var j = 0; j < i['mission_id'].length; j++) {
+                                    var li = document.createElement('li')
+                                    li.innerHTML = i['mission_id'][j]
+                                    ul.appendChild(li)
+                                }
+                                // 3
+                                var id_mission=document.createElement('p')
+                                id_mission.innerHTML= `<b>Mission Ides:</b>${ul.outerHTML}`
+
+                                // 4
+                                var year=document.createElement('p')
+                                year.innerHTML = `<b>Launch Year:</b> ${i['launch_year']}`
+                                // 5
+                                var success_lauch=document.createElement('p')
+                                success_lauch.innerHTML = `<b>Successfull Launch:</b>${i['launch_success']}`
+
+                                // 6
+                                var succss_land=document.createElement('p')
+                                succss_land.innerHTML = `<b>Successfull Land:</b>${i['rocket']['first_stage']['cores'][0]['land_success']}`
+
+                                main_div.appendChild(img_div)
+                                main_div.appendChild(p_name)
+                                main_div.appendChild(id_mission)
+                                main_div.appendChild(year)
+                                main_div.appendChild(success_lauch)
+                                main_div.appendChild(succss_land)
+
+                                super_div.appendChild(main_div)
+
+                            }
+                            
+                        } else {
+                            console.log('Request failed.  Returned status of ' + xhr.status);
+                        }
+                    }
+                    xhr.send();
+                    buttonsContainer2.removeEventListener('click', s)
+                }
+                buttonsContainer2.addEventListener("click", s);
+            }
+            else if (x === 3) {
+                const buttonsContainer3 = document.getElementById("land_filter_id");
+                var v = ''
+                // add an event listener to the parent element
+
+                const s = (event) => {
+                    // check if the clicked element is a button
+                    if (event.target.nodeName === "BUTTON") {
+                        // log the value of the clicked button
+                        v = event.target.value
+                        console.log(v)
+                    }
+                    const xhr = new XMLHttpRequest();
+                    // xhr.open('GET', `https://api.spacexdata.com/v3/launches?limit=100&launch_success=true&land_success=${v}`);
+                    xhr.open('POST',`/filter_by_land_${v}`)
+                    window.history.pushState(null,null,`filter_by_land_${v}`)
+                    // xhr.open('GET', `hello`);
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            const data = JSON.parse(xhr.responseText);
+                            console.log(data)
+                            super_div = document.getElementById('program')
+                            super_div.innerHTML = ''
+                            for (var m = 0; m < data.length; m++) {
+                                var i = data[m]
+                                const main_div = document.createElement("div");
+                                main_div.setAttribute('class', 'program_detail background_color border_radius')
+                                main_div.setAttribute('id', 'program_detail')
+
+                                // image
+                                // 1
+
+                                var img_div=document.createElement('div')
+                                img_div.setAttribute('class','img border_radius')
+                                img_div.innerHTML = `<img src='${i['links']['mission_patch']}' alt='img not found'>`
+                                // 2
+                                var p_name=document.createElement('p')
+                                p_name.innerHTML = `<b style="color: blue;">${i['mission_name']} # ${i['flight_number']}</b>`
+
+                                var ul = document.createElement('ul')
+                                for (var j = 0; j < i['mission_id'].length; j++) {
+                                    var li = document.createElement('li')
+                                    li.innerHTML = i['mission_id'][j]
+                                    ul.appendChild(li)
+                                }
+                                // 3
+                                var id_mission=document.createElement('p')
+                                id_mission.innerHTML= `<b>Mission Ides:</b>${ul.outerHTML}`
+
+                                // 4
+                                var year=document.createElement('p')
+                                year.innerHTML = `<b>Launch Year:</b> ${i['launch_year']}`
+                                // 5
+                                var success_lauch=document.createElement('p')
+                                success_lauch.innerHTML = `<b>Successfull Launch:</b>${i['launch_success']}`
+
+                                // 6
+                                var succss_land=document.createElement('p')
+                                succss_land.innerHTML = `<b>Successfull Land:</b>${i['rocket']['first_stage']['cores'][0]['land_success']}`
+
+                                main_div.appendChild(img_div)
+                                main_div.appendChild(p_name)
+                                main_div.appendChild(id_mission)
+                                main_div.appendChild(year)
+                                main_div.appendChild(success_lauch)
+                                main_div.appendChild(succss_land)
+
+                                super_div.appendChild(main_div)
+
+                            }
+                        } else {
+                            console.log('Request failed.  Returned status of ' + xhr.status);
+                        }
+                    }
+                    xhr.send();
+
+                    // const titleElement = document.createElement("div");
+                    // const imageElement = document.createElement("img");
+                    // const descriptionElement = document.createElement("p");
+                    buttonsContainer3.removeEventListener('click', s)
+                }
+                buttonsContainer3.addEventListener("click", s);
+            }
+
+        }
+        // const loadDataBtn = document.getElementById('load-data-btn');
+        //         const xhr = new XMLHttpRequest();
+
+        //         xhr.open('GET', `/https://api.spaceXdata.com/v3/launches?limit=100&launch_success=true&land_success=true&launch_year=${v}`);
+
+        //         xhr.onload = function () {
+        //             if (xhr.status === 200) {
+        //                 const data = JSON.parse(xhr.responseText);
+        //                 // dataContainer.innerHTML = `Name: ${data.name}, Age: ${data.age}`;
+        //                 console.log(data)
+        //             } else {
+        //                 console.log('Request failed.  Returned status of ' + xhr.status);
+        //             }
+        //         }
+        //         xhr.send();
+    </script>
+</body>
+
+</html>
