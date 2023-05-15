@@ -1,6 +1,9 @@
 from flask import Flask, request, render_template, url_for, jsonify
 import requests
 import json
+from waitress import serve
+
+
 app = Flask(__name__)
 
 
@@ -27,4 +30,5 @@ def land_filter(boolean):
     return jsonify(data.json())
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print('server stated')
+    serve(app, host="0.0.0.0", port=1831)
